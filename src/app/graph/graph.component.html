@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="svg-container">
+    <svg width="800" height="600" (contextmenu)="onRightClick($event)"></svg>
+    <div class="output-container">
+      <h3 class="title">Результати алгоритмів:</h3>
+      <div class="d-f">
+        <span class="small-text">Алгоритм центральності:</span>
+      <div id="degreeCentralityOutput" class="output"></div>
+      </div>
+      <div class="d-f">
+        <span class="small-text">Центральність посередницства:</span>
+      <div id="betweennessCentralityOutput" class="output"></div>
+      </div>
+      <div class="d-f">
+        <span class="small-text">Алгоритм Дейкстри:</span>
+      <div id="shortestPathOutput" class="output"></div>
+      </div>
+      <div class="d-f">
+        <span class="small-text">Алгоритм Пейджа-Ранка:</span>
+      <div id="pageRankOutput" class="output"></div>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <span class="semi-title text-default">Змінити дані в JSON:</span>
+    <textarea [(ngModel)]="jsonData" id="jsonData" (input)="updateGraph(jsonData)"></textarea>
+    <h3 class="title">Розрахунок алгоритмів:</h3>
+    <hr>
+    <div class="semi-title d-f ai-c text-default g10">
+      <span>Алгоритм центральності за ступенем</span>
+      <span matTooltip="Цей алгоритм вираховує центральність вершини у графі, базуючись на кількості її зв'язків (степенів). Центральність за ступенем показує, наскільки важливою є вершина у графі: чим більше з'єднань має вершина, тим вища її центральність. Це дозволяє ідентифікувати найбільш впливові вершини, які мають найбільшу кількість прямих зв'язків з іншими вершинами." matTooltipPosition="above" matTooltipClass="custom-tooltip" matTooltipHideDelay="1000" class="material-symbols-outlined icon-small">
+        info
+      </span>
+    </div>
+    <button class="btn btn-function" (click)="calculateDegreeCentrality()">Алгоритм центральності</button>
+    <div class="semi-title d-f ai-c text-default g10">
+      <span>Центральність посередництва</span>
+      <span matTooltip="Цей алгоритм вимірює важливість вершини у графі, базуючись на кількості найкоротших шляхів між усіма парами вершин, які проходять через цю вершину. Вершини з високою центральністю посередництва відіграють роль 'мостів' у графі, полегшуючи зв'язок між різними частинами мережі. Висока центральність посередництва свідчить про те, що вершина є критично важливою для передачі інформації або ресурсів у графі." matTooltipPosition="above" matTooltipClass="custom-tooltip" matTooltipHideDelay="1000" class="material-symbols-outlined icon-small">
+        info
+      </span>
+    </div>
+    <button class="btn btn-function" (click)="calculateBetweennessCentrality()">Центральність посередництва</button>
+    <div>
+      <div class="semi-title d-f ai-c text-default g10">
+        <span>Алгоритм Дейкстри</span>
+        <span matTooltip="Алгоритм знаходить найкоротший шлях між двома точками у графі. Оберіть стартову та кінцеву точку зі списків нижче за натисність кнопку. Найкоротший шлях між точками буде виведено в результаті сторінки" matTooltipPosition="above" matTooltipClass="custom-tooltip" matTooltipHideDelay="1000" class="material-symbols-outlined icon-small">
+          info
+        </span>
+      </div>
+      <label for="startNode">Стартова точка:</label>
+      <select id="startNode" [(ngModel)]="startNode">
+        <option *ngFor="let node of data.nodes" [value]="node.id">{{'['+node.id+'] '+node.name}}</option>
+      </select>
+    </div>
+    <div>
+      <label for="endNode">Кінцева точка:</label>
+      <select id="endNode" [(ngModel)]="endNode">
+        <option *ngFor="let node of data.nodes" [value]="node.id">{{'['+node.id+'] '+node.name}}</option>
+      </select>
+    </div>
+    <button class="btn btn-function" (click)="findShortestPath(startNode, endNode)">Алгоритм Дейкстри</button>
+    <div>
+      <button class="btn btn-function" (click)="createClusterGraph()">Кластеризація</button>
+    </div>
+    <ul>
+      <li *ngFor="let tag of tags">
+        <span [style.background]="color(tag)" class="tag-color"></span> {{ tag }}
+      </li>
+    </ul>
+    <div class="semi-title d-f ai-c text-default g10">
+      <span>Алгоритм Пейджа-Ранка</span>
+      <span matTooltip="Алгоритм PageRank вимірює важливість вузлів на графіку, враховуючи кількість і якість посилань на кожен вузол. Вузли з вищими рангами вважаються більш важливими." matTooltipPosition="above" matTooltipClass="custom-tooltip" matTooltipHideDelay="1000" class="material-symbols-outlined icon-small">
+        info
+      </span>
+    </div>
+    <button class="btn btn-function" (click)="calculatePageRank()">Алгоритм Пейджа-Ранка</button>
+  </div>
+  <div class="context-menu" #contextMenu>
+    <button (click)="addNode($event)">Додати вузол</button>
+  </div>
+  
+</div>
